@@ -1,0 +1,514 @@
+/* ============================================================================
+   CHATBOT HOSPITALAR - ESTILOS
+   Fase 2: Mobile-first, responsivo, acessível
+   ============================================================================ */
+
+:root {
+    --cor-primaria: #2c5aa0;
+    --cor-primaria-hover: #1e3f5a;
+    --cor-fundo: #f5f7fa;
+    --cor-fundo-dark: #ffffff;
+    --cor-texto: #333333;
+    --cor-texto-light: #666666;
+    --cor-borda: #e0e0e0;
+    --cor-msg-bot: #f0f0f0;
+    --cor-msg-paciente: #e3f2fd;
+    --cor-sucesso: #4caf50;
+    --cor-aviso: #ff9800;
+    
+    --font-principal: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-size-base: 16px;
+    --font-size-pequeno: 14px;
+    --font-size-titulo: 24px;
+    --font-size-botao: 16px;
+    
+    --espaco-base: 16px;
+    --espaco-pequeno: 8px;
+    --espaco-grande: 24px;
+    
+    --raio-border: 12px;
+    --raio-botao: 8px;
+    
+    --transicao: 0.3s ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cor-fundo: #1a1a1a;
+        --cor-fundo-dark: #2d2d2d;
+        --cor-texto: #e0e0e0;
+        --cor-texto-light: #b0b0b0;
+        --cor-borda: #404040;
+        --cor-msg-bot: #3a3a3a;
+        --cor-msg-paciente: #1e3a5f;
+    }
+}
+
+/* ============================================================================
+   RESET E BASE
+   ============================================================================ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+    font-family: var(--font-principal);
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    color: var(--cor-texto);
+    background-color: var(--cor-fundo);
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    overflow-x: hidden;
+}
+
+/* ============================================================================
+   CONTAINER PRINCIPAL
+   ============================================================================ */
+
+.chatbot-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--cor-fundo-dark);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================================================
+   TELAS (identificação e chat)
+   ============================================================================ */
+
+.tela-ativa {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    animation: fadeIn 0.4s ease;
+}
+
+.tela-inativa {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================================================
+   TELA DE IDENTIFICAÇÃO
+   ============================================================================ */
+
+.identificacao-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: var(--espaco-grande) var(--espaco-base);
+}
+
+.identificacao-header {
+    text-align: center;
+    padding-bottom: var(--espaco-grande);
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.identificacao-header h1 {
+    font-size: var(--font-size-titulo);
+    color: var(--cor-primaria);
+    margin-bottom: var(--espaco-pequeno);
+}
+
+.identificacao-header p {
+    font-size: var(--font-size-pequeno);
+    color: var(--cor-texto-light);
+}
+
+.identificacao-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--espaco-grande) 0;
+}
+
+.identificacao-texto {
+    margin-bottom: var(--espaco-grande);
+    line-height: 1.8;
+    color: var(--cor-texto-light);
+}
+
+/* ============================================================================
+   FORMULÁRIO
+   ============================================================================ */
+
+.form-identificacao {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-grande);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-weight: 600;
+    margin-bottom: var(--espaco-pequeno);
+    color: var(--cor-texto);
+}
+
+.form-group input {
+    padding: var(--espaco-base);
+    font-size: var(--font-size-base);
+    border: 1px solid var(--cor-borda);
+    border-radius: var(--raio-botao);
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto);
+    transition: border-color var(--transicao);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+}
+
+/* ============================================================================
+   BOTÕES
+   ============================================================================ */
+
+.btn {
+    padding: var(--espaco-base) var(--espaco-grande);
+    font-size: var(--font-size-botao);
+    font-weight: 600;
+    border: none;
+    border-radius: var(--raio-botao);
+    cursor: pointer;
+    transition: all var(--transicao);
+    text-align: center;
+    display: inline-block;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.btn-primario {
+    background-color: var(--cor-primaria);
+    color: white;
+}
+
+.btn-primario:hover {
+    background-color: var(--cor-primaria-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(44, 90, 160, 0.3);
+}
+
+.btn-primario:active {
+    transform: translateY(0);
+}
+
+.btn-grande {
+    padding: 14px 24px;
+    font-size: 18px;
+    width: 100%;
+    min-height: 50px;
+}
+
+.btn-opcao {
+    background-color: var(--cor-msg-bot);
+    color: var(--cor-texto);
+    border: 2px solid var(--cor-borda);
+    text-align: left;
+    padding: 12px 16px;
+    margin-bottom: var(--espaco-pequeno);
+}
+
+.btn-opcao:hover {
+    background-color: var(--cor-primaria);
+    color: white;
+    border-color: var(--cor-primaria);
+}
+
+.btn-opcao:active {
+    transform: scale(0.98);
+}
+
+.btn-pequeno {
+    padding: 10px 16px;
+    font-size: var(--font-size-pequeno);
+    flex: 1;
+    margin: 4px;
+}
+
+/* ============================================================================
+   CHAT - HEADER
+   ============================================================================ */
+
+.chat-header {
+    background: linear-gradient(135deg, var(--cor-primaria), #1e3f5a);
+    color: white;
+    padding: var(--espaco-base) var(--espaco-base) var(--espaco-base) var(--espaco-base);
+    padding-top: calc(var(--espaco-base) + env(safe-area-inset-top, 0px));
+    text-align: center;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.chat-header h1 {
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.chat-header p {
+    font-size: var(--font-size-pequeno);
+    opacity: 0.9;
+}
+
+/* ============================================================================
+   CHAT - ÁREA DE MENSAGENS
+   ============================================================================ */
+
+.chat-mensagens {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--espaco-base);
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-grande);
+}
+
+.msg-bot,
+.msg-paciente {
+    display: flex;
+    animation: slideUp 0.3s ease;
+    max-width: 85%;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.msg-bot {
+    justify-content: flex-start;
+}
+
+.msg-paciente {
+    justify-content: flex-end;
+}
+
+.msg-conteudo {
+    padding: var(--espaco-base) var(--espaco-grande);
+    border-radius: var(--raio-border);
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+.msg-bot .msg-conteudo {
+    background-color: var(--cor-msg-bot);
+    color: var(--cor-texto);
+    border-bottom-left-radius: 4px;
+}
+
+.msg-paciente .msg-conteudo {
+    background-color: var(--cor-msg-paciente);
+    color: var(--cor-texto);
+    border-bottom-right-radius: 4px;
+}
+
+/* ============================================================================
+   CHAT - OPÇÕES (botões de perguntas)
+   ============================================================================ */
+
+.chat-opcoes {
+    padding: var(--espaco-base);
+    border-top: 1px solid var(--cor-borda);
+    background-color: var(--cor-fundo-dark);
+    max-height: 50vh;
+    overflow-y: auto;
+    padding-bottom: calc(var(--espaco-base) + env(safe-area-inset-bottom, 0px));
+}
+
+.opcoes-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-pequeno);
+}
+
+.opcao-botao {
+    background-color: white;
+    border: 2px solid var(--cor-primaria);
+    color: var(--cor-primaria);
+    padding: 12px 16px;
+    border-radius: var(--raio-botao);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    transition: all var(--transicao);
+    text-align: left;
+    width: 100%;
+}
+
+.opcao-botao:hover {
+    background-color: var(--cor-primaria);
+    color: white;
+    transform: translateX(4px);
+}
+
+.opcao-botao:active {
+    transform: translateX(2px);
+}
+
+/* ============================================================================
+   RESPONSIVIDADE - DESKTOP
+   ============================================================================ */
+
+@media (min-width: 768px) {
+    .chatbot-container {
+        max-width: 500px;
+        height: auto;
+        max-height: 90vh;
+        border-radius: var(--raio-border);
+        margin-top: 5vh;
+        margin-bottom: 5vh;
+    }
+
+    .msg-bot,
+    .msg-paciente {
+        max-width: 70%;
+    }
+
+    .btn-opcao {
+        max-width: 85%;
+    }
+}
+
+/* ============================================================================
+   ACESSIBILIDADE
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Contraste mínimo para idosos e baixa visão */
+@media (prefers-contrast: more) {
+    .btn {
+        font-weight: 700;
+        border: 2px solid currentColor;
+    }
+
+    .msg-conteudo {
+        font-weight: 500;
+    }
+}
+
+/* ============================================================================
+   SCROLLBAR CUSTOMIZADO (opcional)
+   ============================================================================ */
+
+.chat-mensagens::-webkit-scrollbar,
+.chat-opcoes::-webkit-scrollbar {
+    width: 6px;
+}
+
+.chat-mensagens::-webkit-scrollbar-track,
+.chat-opcoes::-webkit-scrollbar-track {
+    background: var(--cor-fundo);
+}
+
+.chat-mensagens::-webkit-scrollbar-thumb,
+.chat-opcoes::-webkit-scrollbar-thumb {
+    background: var(--cor-borda);
+    border-radius: 3px;
+}
+
+.chat-mensagens::-webkit-scrollbar-thumb:hover,
+.chat-opcoes::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-primaria);
+}
+
+/* ============================================================================
+   FASE 6 - CAMPO DE PERGUNTA LIVRE / IA
+   ============================================================================ */
+
+.msg-conteudo {
+    white-space: pre-wrap;
+}
+
+.chat-ia {
+    padding: 12px var(--espaco-base);
+    border-top: 1px solid var(--cor-borda);
+    background: white;
+}
+
+.chat-ia-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: var(--font-size-pequeno);
+    font-weight: 600;
+}
+
+.chat-ia-linha {
+    display: flex;
+    gap: 8px;
+}
+
+.chat-ia-linha input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px;
+    border: 2px solid var(--cor-borda);
+    border-radius: var(--raio-botao);
+    font: inherit;
+}
+
+.chat-ia-linha input:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+}
+
+.chat-ia-enviar {
+    border: 0;
+    border-radius: var(--raio-botao);
+    padding: 0 16px;
+    background: var(--cor-primaria);
+    color: white;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.chat-ia-enviar:disabled,
+.chat-ia-linha input:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.chat-ia-form small {
+    display: block;
+    margin-top: 6px;
+    color: #666;
+    line-height: 1.3;
+}

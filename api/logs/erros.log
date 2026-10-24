@@ -1,0 +1,15 @@
+[2026-10-23 21:30:44] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
+[2026-10-23 21:36:02] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
+[2026-10-23 22:07:37] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
+[2026-10-23 22:15:53] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
+[2026-10-23 22:18:37] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
+[2026-10-23 23:09:28] Erro ao conectar ao OpenRouter: SSL certificate problem: unable to get local issuer certificate
+[2026-10-23 23:30:48] Erro ao conectar ao OpenRouter: SSL certificate problem: unable to get local issuer certificate
+[2026-10-23 23:34:04] Erro ao conectar ao OpenRouter: SSL certificate problem: unable to get local issuer certificate
+[2026-10-23 23:37:27] Erro ao conectar ao OpenRouter: SSL certificate problem: unable to get local issuer certificate
+[2026-10-23 23:39:34] OpenRouter HTTP 402: This request requires more credits, or fewer max_tokens. You requested up to 500 tokens, but can only afford 267. To increase, visit https://openrouter.ai/settings/credits and add more credits
+[2026-10-23 23:45:45] OpenRouter HTTP 429: Provider returned error
+[2026-10-23 23:49:38] OpenRouter HTTP 429: Provider returned error
+[2026-10-23 23:52:58] OpenRouter HTTP 429: Provider returned error
+[2026-10-23 23:55:58] OpenRouter HTTP 404: Provider returned error
+[2026-10-24 00:16:55] Erro no RAG: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'chatbot_hospital.conhecimentos' doesn't exist
