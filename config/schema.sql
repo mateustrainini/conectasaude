@@ -950,3 +950,47 @@ WHERE NOT EXISTS (
         AND existente.procedimento = demonstracao.procedimento
         AND existente.status = 'aguardando'
 );
+
+INSERT INTO conhecimentos
+    (titulo, conteudo, categoria_id, palavras_chave, ativo)
+VALUES
+
+(
+    'Vacinas do paciente',
+    'O portal permite consultar as vacinas registradas para o paciente, incluindo nome da vacina, dose, situação, data de aplicação e próxima dose quando disponível. A resposta deve utilizar os dados registrados no portal e não deve inventar doses ou recomendações médicas.',
+    NULL,
+    'vacina,vacinas,vacinação,dose,doses,minhas vacinas,vacina pendente,próxima dose',
+    1
+),
+
+(
+    'Exames do paciente',
+    'O portal permite consultar os exames vinculados ao paciente. Podem ser exibidos nome do exame, situação, data da solicitação, agendamento, instruções e resultado resumido quando disponível. O assistente não deve interpretar resultados nem realizar diagnóstico.',
+    NULL,
+    'exame,exames,meus exames,resultado,exame pendente,exame agendado,próximo exame',
+    1
+),
+
+(
+    'Unidades de saúde',
+    'O portal possui unidades de saúde cadastradas com nome, tipo, endereço, localização e horário de atendimento. Quando o usuário perguntar sobre unidades próximas, devem ser consideradas somente as unidades cadastradas no sistema.',
+    NULL,
+    'unidade,unidades,unidades perto,unidade próxima,ubs,hospital,posto,endereço,horário',
+    1
+),
+
+(
+    'Alta hospitalar',
+    'O portal permite consultar informações de alta hospitalar do paciente, incluindo resumo, orientações, retorno recomendado, situação e data da alta. O assistente deve somente explicar as informações registradas e não criar novas orientações médicas.',
+    NULL,
+    'alta,minha alta,alta hospitalar,orientações de alta,retorno,histórico de alta',
+    1
+),
+
+(
+    'Lista de espera',
+    'O portal permite consultar procedimentos do paciente em lista de espera. São apresentadas informações como procedimento, dias de espera e classificação. As classificações utilizadas são verde, amarelo, laranja e vermelho. A classificação é determinada pelo sistema e não deve ser alterada pela inteligência artificial.',
+    NULL,
+    'lista de espera,fila,espera,procedimento,prioridade,classificação,verde,amarelo,laranja,vermelho',
+    1
+);

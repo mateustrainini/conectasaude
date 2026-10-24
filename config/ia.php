@@ -69,7 +69,17 @@ $iaObterVariavel = static function (string $nome, string $padrao = '') use ($iaE
 };
 
 define('IA_PROVEDOR', 'openrouter');
-define('IA_API_KEY', getenv('OPENROUTER_API_KEY') ?: '');
-define('IA_MODEL', getenv('OPENROUTER_MODEL') ?: 'google/gemma-4-31b-it:free');
+define(
+    'IA_API_KEY',
+    $iaObterVariavel('OPENROUTER_API_KEY', '')
+);
+
+define(
+    'IA_MODEL',
+    $iaObterVariavel(
+        'OPENROUTER_MODEL',
+        'google/gemma-3-27b-it:free'
+    )
+);
 define('IA_API_URL', 'https://openrouter.ai/api/v1/chat/completions');
 ?>
