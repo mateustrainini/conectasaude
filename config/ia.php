@@ -69,7 +69,14 @@ $iaObterVariavel = static function (string $nome, string $padrao = '') use ($iaE
 };
 
 define('IA_PROVEDOR', 'openrouter');
-define('IA_API_KEY', getenv('OPENROUTER_API_KEY') ?: '');
-define('IA_MODEL', getenv('OPENROUTER_MODEL') ?: 'google/gemma-4-31b-it:free');
+$iaModelosAlternativos = explode(',', $iaObterVariavel(
+    'OPENROUTER_FALLBACK_MODELS',
+    'liquid/lfm-2.5-2.6b:free'
+));
+$iaModelosAlternativos = array_values(array_unique(array_filter(array_map('trim', $iaModelosAlternativos))));
+
+define('IA_API_KEY', $iaObterVariavel('OPENROUTER_API_KEY'));
+define('IA_MODEL', $iaObterVariavel('OPENROUTER_MODEL', 'google/gemma-4-31b-it:free'));
+define('IA_FALLBACK_MODELS', $iaModelosAlternativos);
 define('IA_API_URL', 'https://openrouter.ai/api/v1/chat/completions');
 ?>
