@@ -5,13 +5,13 @@
 ### Via MySQL CLI
 
 ```bash
-mysql -u root -p < schema.sql
+mysql -u root -p < config/schema.sql
 ```
 
 Ou, se não tiver senha:
 
 ```bash
-mysql -u root < schema.sql
+mysql -u root < config/schema.sql
 ```
 
 ### Via phpMyAdmin
@@ -57,7 +57,7 @@ php teste_conexao.php
 
 ## 4. O que foi criado
 
-### Banco: `chatbot_hospital`
+### Banco: `conecta_saude`
 
 **Tabelas:**
 
@@ -124,3 +124,18 @@ FASE_1_INSTRUCOES.md — este arquivo
 
 Coloque `db.php` em um lugar seguro (ex: pasta `config/`) onde a API PHP possa incluí-lo com `require 'config/db.php'`.
 
+## Portal de demonstração
+
+O arquivo único `config/schema.sql` cria ou atualiza as tabelas e inclui os
+dados fictícios do portal. Execute o mesmo comando acima tanto em uma
+instalação nova quanto no banco existente; a criação das tabelas e a inserção
+dos exemplos são idempotentes.
+
+O portal também inclui uma lista de espera demonstrativa. A classificação por
+cor pode mudar conforme a quantidade de dias de espera. As cores são fictícias
+e não representam critérios de triagem ou orientação médica.
+
+Os dados inseridos são fictícios. A API pública do portal só retorna pacientes
+marcados com `dados_demonstracao = 1`; não use esse modo sem autenticação com
+dados reais. Abra `http://localhost/conectasaude/assets/index.html` pelo Apache
+para que o navegador consiga chamar a API PHP.

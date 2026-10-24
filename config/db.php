@@ -8,7 +8,7 @@
 define('DB_HOST', 'localhost');
 define('DB_USER', 'root');
 define('DB_PASS', '');
-define('DB_NAME', 'chatbot_hospital');
+define('DB_NAME', 'conecta_saude');
 define('DB_CHARSET', 'utf8mb4');
 
 // Opções PDO
