@@ -150,66 +150,97 @@ PROMPT;
             ]
         ],
         'temperature' => 0.2,
+        'max_tokens' => 800,
+        'reasoning' => ['effort' => 'none'],
     ];
 
-    $payload['model'] = IA_MODEL;
-
     $dadosApi = null;
-    $statusHttp = 0;
-    $erroCurl = '';
+    $textoResposta = '';
+    $modelos = array_values(array_unique(array_merge([IA_MODEL], IA_FALLBACK_MODELS)));
+    $ultimoErro = 'O OpenRouter não retornou uma resposta válida';
 
-    for ($tentativa = 1; $tentativa <= 2; $tentativa++) {
-        $curl = curl_init(IA_API_URL);
-        curl_setopt_array($curl, [
-            CURLOPT_POST => true,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CONNECTTIMEOUT => 10,
-            CURLOPT_TIMEOUT => 40,
-            CURLOPT_HTTPHEADER => [
-                'Authorization: Bearer ' . IA_API_KEY,
-                'Content-Type: application/json',
-                'HTTP-Referer: http://localhost',
-                'X-Title: Chatbot Hospitalar'
-            ],
-            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false, //apenas localhost, não é recomendado em produção
-        ]);
+    foreach ($modelos as $modelo) {
+        $payload['model'] = $modelo;
 
-        $respostaApi = curl_exec($curl);
-        $erroCurl = curl_error($curl);
-        $statusHttp = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        curl_close($curl);
+        for ($tentativa = 1; $tentativa <= 2; $tentativa++) {
+            $curl = curl_init(IA_API_URL);
+            curl_setopt_array($curl, [
+                CURLOPT_POST => true,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CONNECTTIMEOUT => 10,
+                CURLOPT_TIMEOUT => 40,
+                CURLOPT_HTTPHEADER => [
+                    'Authorization: Bearer ' . IA_API_KEY,
+                    'Content-Type: application/json',
+                    'HTTP-Referer: http://localhost',
+                    'X-Title: Chatbot Hospitalar'
+                ],
+                CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ]);
 
-        if ($respostaApi !== false && $erroCurl === '') {
-            $dadosApi = json_decode($respostaApi, true);
-            if ($statusHttp >= 200 && $statusHttp < 300) {
-                break;
+            $respostaApi = curl_exec($curl);
+            $erroCurl = curl_error($curl);
+            $statusHttp = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            curl_close($curl);
+
+            if ($respostaApi !== false && $erroCurl === '') {
+                $dadosApi = json_decode($respostaApi, true);
+                if ($statusHttp >= 200 && $statusHttp < 300) {
+                    $textoResposta = trim((string) ($dadosApi['choices'][0]['message']['content'] ?? ''));
+                    if ($textoResposta !== '') {
+                        break 2;
+                    }
+
+                    $ultimoErro = "O modelo {$modelo} retornou uma resposta sem conteúdo";
+                    log_erro($ultimoErro);
+                    break;
+                }
+
+                $mensagemApi = $dadosApi['error']['message'] ?? 'Erro desconhecido do OpenRouter';
+                $ultimoErro = "OpenRouter HTTP {$statusHttp} no modelo {$modelo}: {$mensagemApi}";
+            } else {
+                $ultimoErro = 'Erro ao conectar ao OpenRouter: ' . $erroCurl;
+            }
+
+            $erroTemporario = $respostaApi === false
+                || in_array($statusHttp, [404, 429, 500, 502, 503, 504], true);
+
+            if (!$erroTemporario) {
+                break 2;
+            }
+
+            if ($tentativa < 2) {
+                sleep($tentativa);
             }
         }
 
-        $erroTemporario = $respostaApi === false
-            || in_array($statusHttp, [429, 500, 502, 503, 504], true);
-
-        if (!$erroTemporario || $tentativa === 2) {
-            if ($respostaApi === false || $erroCurl !== '') {
-                log_erro('Erro ao conectar ao OpenRouter: ' . $erroCurl);
-                resposta_json(false, ['fontes' => $fontes], 'Não foi possível conectar ao serviço de IA');
-            }
-
-            $mensagemApi = $dadosApi['error']['message'] ?? 'Erro desconhecido do OpenRouter';
-            log_erro("OpenRouter HTTP {$statusHttp}: {$mensagemApi}");
-            resposta_json(false, ['fontes' => $fontes], 'O serviço de IA não conseguiu processar a solicitação');
-        }
-
-        sleep($tentativa);
+        log_erro($ultimoErro);
     }
 
-    log_erro('RESPOSTA OPENROUTER: ' . $respostaApi);
-
-    $textoResposta = trim((string) ($dadosApi['choices'][0]['message']['content'] ?? ''));
     if ($textoResposta === '') {
-        log_erro('OpenRouter retornou uma resposta sem conteúdo');
+        log_erro($ultimoErro);
+        if (str_starts_with($ultimoErro, 'Erro ao conectar')) {
+            resposta_json(false, ['fontes' => $fontes], 'Não foi possível conectar ao serviço de IA');
+        }
+
+        if (str_contains($ultimoErro, 'HTTP 401')) {
+            resposta_json(false, ['fontes' => $fontes], 'A chave do serviço de IA foi rejeitada. Verifique a configuração no servidor.');
+        }
+
+        if (str_contains($ultimoErro, 'HTTP 402')) {
+            resposta_json(false, ['fontes' => $fontes], 'O serviço de IA está sem créditos disponíveis. Verifique sua conta OpenRouter.');
+        }
+
+        if (str_contains($ultimoErro, 'HTTP 429')) {
+            resposta_json(false, ['fontes' => $fontes], 'Os modelos de IA estão temporariamente limitados. Tente novamente em alguns instantes.');
+        }
+
+        if (str_contains($ultimoErro, 'sem conteúdo')) {
+            resposta_json(false, ['fontes' => $fontes], 'A IA não retornou uma resposta válida');
+        }
+
         resposta_json(false, ['fontes' => $fontes], 'A IA não retornou uma resposta válida');
     }
 

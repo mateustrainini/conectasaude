@@ -39,6 +39,8 @@ const STATE = {
   unitFilter: "todas",
   patientId: null,
   requestId: 0,
+  chatRequestId: 0,
+  chatConversationId: null,
   chatOpen: false,
   chat: [],
   chatFlow: "idle",

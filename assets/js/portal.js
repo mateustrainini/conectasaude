@@ -52,6 +52,12 @@ function setUnitFilter(filter) {
 
 async function selectPatient(patientId) {
   STATE.chatOpen = false;
+  STATE.chatRequestId += 1;
+  STATE.chatConversationId = null;
+  STATE.chat = [];
+  STATE.chatFlow = "idle";
+  STATE.triageIndex = 0;
+  STATE.triageAnswers = [];
   try {
     await loadData(patientId);
   } catch (error) {

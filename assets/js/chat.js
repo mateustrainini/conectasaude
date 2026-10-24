@@ -327,6 +327,45 @@ function cancelChatFlow() {
   render();
 }
 
+function sendQuickChat(question, page) {
+  const answers = {
+    vac: () => {
+      const pending = STATE.data.vacinas.filter(
+        (vaccine) => vaccine.status === "pendente",
+      );
+      return pending.length
+        ? `Há ${pending.length} vacina(s) pendente(s): ${pending.map((vaccine) => vaccine.nome).join(", ")}.`
+        : "Não há vacinas pendentes registradas.";
+    },
+    exa: () => {
+      const open = STATE.data.exames.filter((exam) =>
+        ["solicitado", "agendado"].includes(exam.status),
+      );
+      return open.length
+        ? `Há ${open.length} exame(s) solicitado(s) ou agendado(s): ${open.map((exam) => exam.nome).join(", ")}.`
+        : "Não há exames pendentes registrados.";
+    },
+    uni: () =>
+      `Há ${STATE.data.unidades.length} unidade(s) de saúde cadastrada(s). Não tenho sua localização para identificar a mais próxima.`,
+    hist: () => {
+      const latestDischarge = STATE.data.altas[0];
+      return latestDischarge
+        ? `A alta mais recente está com status ${STATUS_LABELS[latestDischarge.status] || latestDischarge.status}.`
+        : "Não há alta hospitalar registrada.";
+    },
+  };
+  const answer = answers[page];
+
+  if (!answer || !STATE.data) return;
+
+  STATE.chat.push(
+    { sender: "user", text: question },
+    { sender: "assistant", text: answer(), page },
+  );
+  render();
+  $("#chatInput")?.focus();
+}
+
 async function getChatConversationId() {
   if (STATE.chatConversationId) {
     return STATE.chatConversationId;
@@ -362,6 +401,10 @@ async function getChatConversationId() {
     );
   }
 
+  if (Number(STATE.patientId) !== Number(patient.id)) {
+    throw new Error("O paciente foi alterado durante o início da conversa.");
+  }
+
   STATE.chatConversationId = result.conversa_id;
 
   return result.conversa_id;
@@ -369,6 +412,7 @@ async function getChatConversationId() {
 
 async function sendChat(question) {
   if (!question?.trim()) return;
+  const requestId = ++STATE.chatRequestId;
 
   STATE.chat.push({
     sender: "user",
@@ -379,6 +423,7 @@ async function sendChat(question) {
 
   try {
     const conversaId = await getChatConversationId();
+    if (requestId !== STATE.chatRequestId) return;
 
     const body = new URLSearchParams({
       conversa_id: conversaId,
@@ -397,6 +442,7 @@ async function sendChat(question) {
     });
 
     const result = await response.json();
+    if (requestId !== STATE.chatRequestId) return;
 
     if (!response.ok || !result.success) {
       throw new Error(
@@ -410,6 +456,7 @@ async function sendChat(question) {
     });
   } catch (error) {
     console.error(error);
+    if (requestId !== STATE.chatRequestId) return;
 
     STATE.chat.push({
       sender: "assistant",

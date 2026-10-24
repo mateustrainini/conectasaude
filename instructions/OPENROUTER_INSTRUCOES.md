@@ -13,7 +13,7 @@ Crie um arquivo `.env` na pasta raiz do projeto (ao lado de `index.php`):
 ```dotenv
 OPENROUTER_API_KEY=sk-or-v1-sua-chave
 OPENROUTER_MODEL=google/gemma-4-31b-it:free
-OPENROUTER_FALLBACK_MODELS=liquid/lfm-2.5-2.6b:free
+OPENROUTER_FALLBACK_MODELS=nvidia/nemotron-3.5-lightning:free
 ```
 
 O `.env` já é ignorado pelo Git e a aplicação o lê diretamente a cada requisição. O arquivo não deve ser enviado ao repositório. O `.htaccess` bloqueia seu acesso via navegador.
@@ -79,7 +79,7 @@ O valor precisa ser o ID/slug exato exibido pelo OpenRouter, por exemplo um mode
 5. A resposta será exibida no chat.
 
 Se a pergunta não encontrar conteúdo no RAG, nenhuma chamada à IA é feita.
-Falhas temporárias (limitação, indisponibilidade ou erro de conexão) recebem uma nova tentativa. A resposta da IA foi limitada a 250 tokens para reduzir o uso de créditos.
+Falhas temporárias (limitação, indisponibilidade ou erro de conexão) recebem uma nova tentativa e modelos alternativos gratuitos podem ser configurados. O chat limita a resposta a 800 tokens e desativa o raciocínio para reservar o limite para a resposta visível.
 
 ## Segurança
 

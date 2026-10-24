@@ -78,8 +78,15 @@ define(
     'IA_MODEL',
     $iaObterVariavel(
         'OPENROUTER_MODEL',
-        'google/gemma-3-27b-it:free'
+        'google/gemma-4-31b-it:free'
     )
 );
+$iaModelosAlternativos = array_values(array_unique(array_filter(
+    array_map('trim', explode(',', $iaObterVariavel(
+        'OPENROUTER_FALLBACK_MODELS',
+        'nvidia/nemotron-3.5-lightning:free'
+    )))
+)));
+define('IA_FALLBACK_MODELS', $iaModelosAlternativos);
 define('IA_API_URL', 'https://openrouter.ai/api/v1/chat/completions');
 ?>

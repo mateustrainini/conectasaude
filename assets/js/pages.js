@@ -170,7 +170,7 @@ function chatPage() {
               <button class="btn" type="submit">Registrar resposta</button>
             </form>
             <button class="chip" onclick="cancelChatFlow()">Cancelar triagem</button>`
-          : `<div class="chips">${["Minhas vacinas", "Meus exames", "Unidades perto", "Minha alta"].map((question) => `<button class="chip" onclick="sendChat('${question}')">${question}</button>`).join("")}
+          : `<div class="chips">${[["Minhas vacinas", "vac"], ["Meus exames", "exa"], ["Unidades perto", "uni"], ["Minha alta", "hist"]].map(([question, page]) => `<button class="chip" onclick="sendQuickChat('${question}', '${page}')">${question}</button>`).join("")}
             <button class="chip" onclick="beginReferral()">➡️ Encaminhar paciente</button>
           </div>
           <form class="row" onsubmit="sendChatFromForm(event)"><input id="chatInput" aria-label="Mensagem" placeholder="Digite sua pergunta" autocomplete="off"><button class="btn" style="margin:0">Enviar</button></form>`
