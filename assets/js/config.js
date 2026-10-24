@@ -30,7 +30,7 @@ const STATUS_LABELS = {
 const URGENCY_LABELS = {
   verde: "Verde",
   amarelo: "Amarela",
-  laranja: "Laranja",
+  azul: "Azul",
   vermelho: "Vermelha",
 };
 const STATE = {

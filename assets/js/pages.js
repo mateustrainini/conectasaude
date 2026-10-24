@@ -85,7 +85,7 @@ function waitingListPage() {
   <div class="urgency-legend" aria-label="Legenda das cores">
     ${[
       ["vermelho", URGENCY_LABELS.vermelho],
-      ["laranja", URGENCY_LABELS.laranja],
+      ["azul", URGENCY_LABELS.azul],
       ["amarelo", URGENCY_LABELS.amarelo],
       ["verde", URGENCY_LABELS.verde],
     ]

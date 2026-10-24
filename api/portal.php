@@ -40,12 +40,12 @@ try {
     }
 
     if ($patientId === null && !empty($patients)) {
-        $patientId = (int)$patients[0]['id'];
+        $patientId = (int) $patients[0]['id'];
     }
 
     $patient = null;
     foreach ($patients as $listedPatient) {
-        if ((int)$listedPatient['id'] === $patientId) {
+        if ((int) $listedPatient['id'] === $patientId) {
             $patient = $listedPatient;
             break;
         }
@@ -98,16 +98,39 @@ try {
                                       l.data_entrada, DATEDIFF(CURRENT_DATE, l.data_entrada) AS dias_espera,
                                       l.observacoes, u.nome AS unidade,
                                       CASE
-                                          WHEN l.classificacao_inicial = 'verde'
-                                               AND l.dias_ate_reclassificacao IS NOT NULL
-                                               AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= l.dias_ate_reclassificacao
-                                          THEN 'amarelo'
-                                          ELSE l.classificacao_inicial
-                                      END AS classificacao_atual
+                                        WHEN l.dias_ate_reclassificacao IS NULL
+                                            THEN l.classificacao_inicial
+
+                                        WHEN l.classificacao_inicial = 'verde'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= (l.dias_ate_reclassificacao * 4)
+                                            THEN 'vermelho'
+
+                                        WHEN l.classificacao_inicial = 'verde'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= (l.dias_ate_reclassificacao * 2)
+                                            THEN 'azul'
+
+                                        WHEN l.classificacao_inicial = 'verde'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= l.dias_ate_reclassificacao
+                                            THEN 'amarelo'
+
+                                        WHEN l.classificacao_inicial = 'amarelo'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= (l.dias_ate_reclassificacao * 3)
+                                            THEN 'vermelho'
+
+                                        WHEN l.classificacao_inicial = 'amarelo'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= l.dias_ate_reclassificacao
+                                            THEN 'azul'
+
+                                        WHEN l.classificacao_inicial = 'azul'
+                                            AND DATEDIFF(CURRENT_DATE, l.data_entrada) >= l.dias_ate_reclassificacao
+                                            THEN 'vermelho'
+
+                                        ELSE l.classificacao_inicial
+                                        END AS classificacao_atual
                                FROM lista_espera l
                                LEFT JOIN unidades_saude u ON u.id = l.unidade_saude_id
                                WHERE l.paciente_id = ? AND l.status = 'aguardando'
-                               ORDER BY FIELD(l.classificacao_inicial, 'vermelho', 'laranja', 'amarelo', 'verde'),
+                               ORDER BY FIELD(classificacao_atual, 'vermelho', 'azul', 'amarelo', 'verde'),
                                         l.data_entrada DESC, l.id ASC",
             'altas' => "SELECT a.id, a.resumo, a.orientacoes, a.retorno_recomendado,
                                a.status, a.alta_em, a.enviada_em, a.recebida_em,

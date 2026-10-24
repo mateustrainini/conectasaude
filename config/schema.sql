@@ -285,7 +285,7 @@ CREATE TABLE IF NOT EXISTS lista_espera (
     paciente_id INT NOT NULL,
     unidade_saude_id INT NULL,
     procedimento VARCHAR(255) NOT NULL,
-    classificacao_inicial ENUM('verde', 'amarelo', 'laranja', 'vermelho') NOT NULL DEFAULT 'verde',
+    classificacao_inicial ENUM('verde', 'amarelo', 'azul', 'vermelho') NOT NULL DEFAULT 'verde',
     dias_ate_reclassificacao SMALLINT UNSIGNED NULL,
     data_entrada DATE NOT NULL,
     status ENUM('aguardando', 'realizado', 'cancelado') NOT NULL DEFAULT 'aguardando',
@@ -929,7 +929,7 @@ SELECT paciente.id, unidade.id, demonstracao.procedimento, 'verde',
 FROM (
     SELECT '00000000001' AS cpf,
              'Ressonância magnética do joelho' AS procedimento,
-             100 AS dias_espera, 30 AS dias_ate_reclassificacao,
+             15 AS dias_espera, 0 AS dias_ate_reclassificacao,
              NULL AS observacoes,
              'Laboratório Vida (Demonstração)' AS unidade
     UNION ALL
